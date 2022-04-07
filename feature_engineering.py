@@ -35,8 +35,31 @@ def gen_or_load_feats(feat_fn, headlines, bodies, feature_file):
 
     return np.load(feature_file)
 
+def gen_or_load_tfidf_feats(feat_fn, headlines, bodies):
+    feats = feat_fn(headlines, bodies)
+    return feats
 
+def get_tfidf_headlines(h, b):
+    vectorizer_headline = feature_extraction.text.TfidfVectorizer(max_features=75)
+    # vectorizer_bodies = feature_extraction.text.TfidfVectorizer(max_features=50, ngram_range=(1,3))
+    vectorizer_headline.fit(h)
+    # vectorizer_bodies.fit(b)
 
+    X_headlines = vectorizer_headline.transform(h)
+    # X_bodies = vectorizer_bodies.transform(b)
+
+    return X_headlines
+
+def get_tfidf_bodies(h, b):
+    # vectorizer_headline = feature_extraction.text.TfidfVectorizer(max_features=50, ngram_range=(1,2))
+    vectorizer_bodies = feature_extraction.text.TfidfVectorizer(max_features=1000)
+    # vectorizer_headline.fit(h)
+    vectorizer_bodies.fit(b)
+
+    # X_headlines = vectorizer_headline.transform(h)
+    X_bodies = vectorizer_bodies.transform(b)
+
+    return X_bodies
 
 def word_overlap_features(headlines, bodies):
     X = []
